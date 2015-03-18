@@ -1,4 +1,4 @@
-# OmniAuth GitHub
+# OmniAuth MIT
 
 This is the MIT strategy for authenticating to MIT. 
 
