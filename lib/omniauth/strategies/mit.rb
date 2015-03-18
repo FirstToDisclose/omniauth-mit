@@ -4,9 +4,9 @@ module OmniAuth
   module Strategies
     class MIT < OmniAuth::Strategies::OAuth2
       option :client_options, {
-        :site => 'https://MIT',
-        :authorize_url => 'https://MIT',
-        :token_url => 'https://MIT/login/oauth/access_token'
+        :site => 'https://oidc.mit.edu/',
+        :authorize_url => 'https://oidc.mit.edu/authorize',
+        :token_url => 'https://oidc.mit.edu/token'
       }
 
       def request_phase
@@ -27,8 +27,8 @@ module OmniAuth
 
       info do
         {
-          'nickname' => raw_info['login'],
-          'email' => email,
+          'nickname' => raw_info['preferred_username'],
+          'email' => raw_info['email'],
           'name' => raw_info['name'],
         }
       end
@@ -42,27 +42,6 @@ module OmniAuth
         @raw_info ||= access_token.get('user').parsed
       end
 
-      def email
-        (email_access_allowed?) ? primary_email : raw_info['email']
-      end
-
-      def primary_email
-        primary = emails.find{|i| i['primary'] }
-        primary && primary['email'] || emails.first && emails.first['email']
-      end
-
-      def emails
-        return [] unless email_access_allowed?
-        access_token.options[:mode] = :query
-        # @emails ||= access_token.get('user/emails', :headers => { 'Accept' => 'application/vnd.github.v3' }).parsed
-      end
-
-      def email_access_allowed?
-        return false unless options['scope']
-        email_scopes = ['user', 'user:email']
-        scopes = options['scope'].split(',')
-        (scopes & email_scopes).any?
-      end
     end
   end
 end
