@@ -2,11 +2,11 @@ require 'omniauth-oauth2'
 
 module OmniAuth
   module Strategies
-    class GitHub < OmniAuth::Strategies::OAuth2
+    class MIT < OmniAuth::Strategies::OAuth2
       option :client_options, {
-        :site => 'https://api.github.com',
-        :authorize_url => 'https://github.com/login/oauth/authorize',
-        :token_url => 'https://github.com/login/oauth/access_token'
+        :site => 'https://MIT',
+        :authorize_url => 'https://MIT',
+        :token_url => 'https://MIT/login/oauth/access_token'
       }
 
       def request_phase
@@ -30,11 +30,6 @@ module OmniAuth
           'nickname' => raw_info['login'],
           'email' => email,
           'name' => raw_info['name'],
-          'image' => raw_info['avatar_url'],
-          'urls' => {
-            'GitHub' => raw_info['html_url'],
-            'Blog' => raw_info['blog'],
-          },
         }
       end
 
@@ -56,11 +51,10 @@ module OmniAuth
         primary && primary['email'] || emails.first && emails.first['email']
       end
 
-      # The new /user/emails API - http://developer.github.com/v3/users/emails/#future-response
       def emails
         return [] unless email_access_allowed?
         access_token.options[:mode] = :query
-        @emails ||= access_token.get('user/emails', :headers => { 'Accept' => 'application/vnd.github.v3' }).parsed
+        # @emails ||= access_token.get('user/emails', :headers => { 'Accept' => 'application/vnd.github.v3' }).parsed
       end
 
       def email_access_allowed?
@@ -73,4 +67,4 @@ module OmniAuth
   end
 end
 
-OmniAuth.config.add_camelization 'github', 'GitHub'
+OmniAuth.config.add_camelization 'mit', 'MIT'
