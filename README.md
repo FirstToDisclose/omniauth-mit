@@ -5,7 +5,7 @@ This is the MIT strategy for authenticating to MIT.
 ## Basic Usage
 
     use OmniAuth::Builder do
-      provider :github, ENV['MIT_KEY'], ENV['MIT_SECRET']
+      provider :mit, ENV['MIT_KEY'], ENV['MIT_SECRET']
     end
 
 ## License
